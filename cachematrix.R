@@ -2,7 +2,7 @@
 ## Class:       Coursera R Programming.
 ## Assignment:  Programming Assignment #2.
 ## Filename:    cachematrix.R.
-## Date:        8/22/2014
+## Date:        8/23/2014
 ## Summary:     Cache the inverse of a matrix by creating the following functions:
 ##                      makeCacheMatrix() 
 ##                      cacheSolve() 
@@ -12,8 +12,8 @@
 ## 2.   R's solve() function computes the inverse of a square invertible matrix.
 ## 3.   Assume the matrix supplied is always an invertible matrix.
 ## 4.   There may be some benefit to caching rather than computing repeatedly,
-##      since matrix inversion is a costly computation.
-## 5.   The first function, makeCacheMatrix(), creates a vector that consists
+##      since matrix inversion is a costly computation, according to instructor.
+## 5.   The first function, makeCacheMatrix(), returns a vector that consists
 ##      of a list of child functions, detailed later.
 ## 6.   The second function, cacheSolve(), calls makeCacheMatrix's child functions 
 ##      to compute the inverse, detailed later.
@@ -27,7 +27,9 @@
 ##      A free variable is one that's not defined locally.
 ## 
 ## Notes:
-## 1.   Parent environment: The parent environment in R is the calling environment.  
+## 1.   R uses lexical scoping.  
+##      The parent environment is the environment in which the object was defined.
+##      (Versus dynamic scoping where parent is the calling environment.)
 ##      If a function is defined inside another function, then the outer function is the parent of
 ##      the inside function.  For example, f_get()'s parent, defined below, is makeCacheMatrix().
 ##
@@ -35,9 +37,31 @@
 ##      Objects created via "<-" in a local environment are not automatically accessible to objects outside
 ##      of that local environment.
 ##      To access another's environment:
-##      Operator "<<-" can assign a value to a variable in one of its parent's environments.  See #7 above.
-##      Syntax r$c() can call a child function from its parent function,
-##      if the parent function returned the children as a list.  See #3 below.
+##      Operator "<<-" assigns a value to a variable in one of its parent's environments.  See #7 above.
+## 
+##      More on Lexical Scoping 
+##      1.  A variable's value can be changed within its defining or local environment with <-.
+##      2.  A parent variable's value can be changed from within a child's defining or local environment with <<-.
+##      3.  Both a parent variable and a child variable with the same name can exist within a function.
+##              In the following example, two var_parent variables exist at the same time, with the same name,
+##              in the same function at the same time.  One is defined in the parent; the other in the child.
+##      
+##              var_parent <- 10
+##              f1 <- function() 
+##              {
+##                      var_parent <<- 100
+##              	var_parent <- 1
+##              }
+##              f2 <- f1()
+##              f2
+##              [1] 1
+##              > var_parent
+##              [1] 100
+##              > 
+##
+##
+##      Therefore, it might be a good idea to attach the defining environment name to each variable name.
+##
 ##      
 ## 2.   Re-using object names can be confusing.
 ##      The instructor's example functions re-use object names in several locations.
@@ -200,5 +224,5 @@ cacheSolve <- function(f1, ...)
 }
 
 ########################################
-## eof (end of file
+## eof (end of file)
 ########################################
